@@ -16,6 +16,9 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -29,6 +32,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "tb_usuario")
 public class Usuario implements UserDetails {
+
+    private static final Logger logger = LoggerFactory.getLogger(Usuario.class);
 
     @Id 
     @GeneratedValue (strategy = GenerationType.AUTO)

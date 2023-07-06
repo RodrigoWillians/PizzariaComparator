@@ -34,7 +34,7 @@ public class RoleService {
 
     // GET BY NAME
     public Roles buscarPorNome(String nome) {
-        return roleRepository.findByRoleName(nome)
+        return roleRepository.findByRoleName(nome.toString())
             .orElseThrow(() -> new ResourceNotFoundException("Role não encontrada: " + nome));
     }
 

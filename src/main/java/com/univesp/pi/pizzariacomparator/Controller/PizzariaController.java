@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -29,49 +30,56 @@ public class PizzariaController {
     @Autowired
     private PizzariaService pizzariaService;
     
-
+    @PreAuthorize("hasRole('MASTER')")
     @GetMapping
     public ResponseEntity<List<Pizzaria>> buscarTodasPizzarias() {
         List<Pizzaria> listaPizzaria = pizzariaService.buscarTodasPizzarias();
         return ResponseEntity.ok(listaPizzaria);
     }
 
+    @PreAuthorize("hasRole('MASTER')")
     @GetMapping("/buscarPorPaginas")
     public ResponseEntity<Page<Pizzaria>> buscarPizzariaPaginado (@RequestParam(defaultValue = "0") Integer numeroPaginas) {
         Page<Pizzaria> paginas = pizzariaService.buscarPizzariaPaginado(numeroPaginas);
         return ResponseEntity.ok(paginas);
         }
 
+    @PreAuthorize("hasRole('MASTER')")
     @GetMapping("/buscarPorNome")
     public ResponseEntity<List<Pizzaria>> buscarPizzariaPorNome(@RequestParam("nome") String nome) {
         List<Pizzaria> buscarNome = pizzariaService.buscarPizzariaPorNome(nome);
         return ResponseEntity.ok(buscarNome);
     }
 
+    @PreAuthorize("hasRole('MASTER')")
     @GetMapping("/{id}")
     public ResponseEntity<Pizzaria> buscarPizzariaPorId(@PathVariable UUID id) {
         Pizzaria pizzaria = pizzariaService.buscarPizzariaPorId(id);
             return ResponseEntity.ok(pizzaria);
         }
 
+    @PreAuthorize("hasRole('MASTER')")
     @PostMapping
     public ResponseEntity<Pizzaria> salvarPizzaria (@RequestBody @Valid PizzariaDTO pizzariaDTO) {
 
         return ResponseEntity.status(201).body(pizzariaService.salvarPizzaria(pizzariaDTO));
     }
 
+    @PreAuthorize("hasRole('MASTER')")
     @PutMapping("/{id}")
     public ResponseEntity<String> atulizarPizzaria(@PathVariable UUID id, @RequestBody PizzariaDTO atualizar) {
         pizzariaService.atualizarPizzaria(id, atualizar);
         return ResponseEntity.ok("Dados atualizados com sucesso");
     }
 
+    @PreAuthorize("hasRole('MASTER')")
     @PatchMapping("/{id}")
     public ResponseEntity<String> atulizarPizzariaPatch(@PathVariable UUID id, @RequestBody PizzariaDTO atualizarPatch) {
         pizzariaService.atualizarPizzariaPatch(id, atualizarPatch);
         return ResponseEntity.ok("Dados atualizados com sucesso");
     }
 
+    @PreAuthorize("hasRole('MASTER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletarPizzaria(@PathVariable UUID id) {
         pizzariaService.deletarPizzaria(id);

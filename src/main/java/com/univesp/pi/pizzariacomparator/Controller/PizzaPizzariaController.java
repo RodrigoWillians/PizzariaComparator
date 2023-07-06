@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -41,30 +42,35 @@ public class PizzaPizzariaController {
     @Autowired PizzaService pizzaService;
     
 
+    @PreAuthorize("hasRole('MASTER')")
     @GetMapping
     public ResponseEntity<List<PizzaPizzaria>> buscarTodasPizzaPizzarias() {
         List<PizzaPizzaria> listaPizzaPizzarias = pizzaPizzariaService.buscarTodasPizzaPizzarias();
         return ResponseEntity.ok(listaPizzaPizzarias);
     }
 
+    @PreAuthorize("hasRole('MASTER')")
     @GetMapping("/buscarPorPaginas")
     public ResponseEntity<Page<PizzaPizzaria>> buscarPizzaPizzariaPaginado (@RequestParam(defaultValue = "0") Integer numeroPaginas) {
         Page<PizzaPizzaria> paginas = pizzaPizzariaService.buscarPizzaPizzariaPaginado(numeroPaginas);
         return ResponseEntity.ok(paginas);
-        }
+    }
 
-        @GetMapping("/compararprecos")
-        public ResponseEntity<List<PizzaPizzaria>> compararPizzarias(@RequestParam("nome") String nome) {
-            List<PizzaPizzaria> buscarPizzarias =  pizzaPizzariaService.compararPrecosPizza(nome);
-            return ResponseEntity.ok(buscarPizzarias);
-        }
+    @PreAuthorize("hasRole('MASTER')")
+    @GetMapping("/compararprecos")
+    public ResponseEntity<List<PizzaPizzaria>> compararPizzarias(@RequestParam("nome") String nome) {
+        List<PizzaPizzaria> buscarPizzarias =  pizzaPizzariaService.compararPrecosPizza(nome);
+        return ResponseEntity.ok(buscarPizzarias);
+    }
 
+    @PreAuthorize("hasRole('MASTER')")
     @GetMapping("/{id}")
     public ResponseEntity<PizzaPizzaria> buscarPizzaPizzariaPorId(@PathVariable UUID id) {
         PizzaPizzaria pizzaPizzaPizzariaria = pizzaPizzariaService.buscarPizzaPizzariaPorId(id);
             return ResponseEntity.ok(pizzaPizzaPizzariaria);
-        }
+    }
 
+    @PreAuthorize("hasRole('MASTER')")
     @PostMapping("/{pizzariaId}/pizzas")
     public ResponseEntity<List<PizzaPizzaria>> salvarPizzasPizzaria(@PathVariable("pizzariaId") UUID pizzariaId, @RequestBody List<PizzaPizzariaDTO> pizzaPizzariaDTOs) {
         PizzaPizzariaDTOId pizzariaDTOId = new PizzaPizzariaDTOId(pizzariaId);
@@ -89,6 +95,7 @@ public class PizzaPizzariaController {
     //     return ResponseEntity.ok("Dados atualizados com sucesso");
     // }
 
+    @PreAuthorize("hasRole('MASTER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletarPizzaPizzaria(@PathVariable UUID id) {
         pizzaPizzariaService.deletarPizzaPizzaria(id);
