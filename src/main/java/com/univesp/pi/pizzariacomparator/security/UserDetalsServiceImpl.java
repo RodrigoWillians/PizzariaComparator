@@ -18,17 +18,18 @@ import com.univesp.pi.pizzariacomparator.Model.Usuario;
 import com.univesp.pi.pizzariacomparator.Repository.UsuarioRepository;
 
 @Service
-@Transactional
 public class UserDetalsServiceImpl implements UserDetailsService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Usuario usuario = usuarioRepository.findByemail(username)
             .orElseThrow(() -> new UsernameNotFoundException("Usuario " + username + " nao encontrado"));    
-        return new User(usuario.getUsername(), usuario.getPassword(), true, true, true, true, usuario.getAuthorities());
+        return usuario;
+            //return new User(usuario.getUsername(), usuario.getPassword(), true, true, true, true, usuario.getAuthorities());
     }
     
 }
